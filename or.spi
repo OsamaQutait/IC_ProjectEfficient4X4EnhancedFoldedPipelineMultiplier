@@ -1,0 +1,32 @@
+*** SPICE deck for cell or{sch} from library Multiplier
+*** Created on Fri Sep 01, 2023 22:30:47
+*** Last revised on Fri Sep 08, 2023 10:19:53
+*** Written on Fri Sep 08, 2023 10:20:02 by Electric VLSI Design System, version 9.07
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT Multiplier__not FROM CELL not{sch}
+.SUBCKT Multiplier__not in out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 out in gnd gnd NMOS L=0.4U W=2U
+Mpmos@0 vdd in out vdd PMOS L=0.4U W=2U
+.ENDS Multiplier__not
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: or{sch}
+Mnmos@0 net@4 a gnd gnd NMOS L=0.4U W=2U
+Mnmos@1 net@4 b gnd gnd NMOS L=0.4U W=2U
+Mpmos@0 vdd a net@1 vdd PMOS L=0.4U W=4U
+Mpmos@1 net@1 b net@4 vdd PMOS L=0.4U W=4U
+Xnot@0 net@4 out Multiplier__not
+
+* Spice Code nodes in cell cell 'or{sch}'
+vdd vdd 0 DC 5V
+v0 a 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 20ns)
+v1 b 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 40ns)
+cload0 out 0 20fF
+.tran 200ns
+.include C:\Users\user\Downloads\C5_models.txt"
+.END

@@ -1,0 +1,57 @@
+*** SPICE deck for cell ha{sch} from library Multiplier
+*** Created on Fri Sep 01, 2023 22:18:40
+*** Last revised on Fri Sep 08, 2023 10:24:39
+*** Written on Fri Sep 08, 2023 10:24:44 by Electric VLSI Design System, version 9.07
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT Multiplier__not FROM CELL not{sch}
+.SUBCKT Multiplier__not in out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 out in gnd gnd NMOS L=0.4U W=2U
+Mpmos@0 vdd in out vdd PMOS L=0.4U W=2U
+.ENDS Multiplier__not
+
+*** SUBCIRCUIT Multiplier__XOR FROM CELL XOR{sch}
+.SUBCKT Multiplier__XOR a b out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 out a net@6 gnd NMOS L=0.4U W=4U
+Mnmos@1 net@6 b gnd gnd NMOS L=0.4U W=4U
+Mnmos@2 gnd net@25 net@7 gnd NMOS L=0.4U W=4U
+Mnmos@3 net@7 net@37 out gnd NMOS L=0.4U W=4U
+Mpmos@0 vdd a net@2 vdd PMOS L=0.4U W=4U
+Mpmos@1 net@2 net@25 out vdd PMOS L=0.4U W=4U
+Mpmos@2 net@3 net@37 vdd vdd PMOS L=0.4U W=4U
+Mpmos@3 out b net@3 vdd PMOS L=0.4U W=4U
+Xnot@0 a net@37 Multiplier__not
+Xnot@1 b net@25 Multiplier__not
+.ENDS Multiplier__XOR
+
+*** SUBCIRCUIT Multiplier__and FROM CELL and{sch}
+.SUBCKT Multiplier__and a b out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 net@4 a net@2 gnd NMOS L=0.4U W=4U
+Mnmos@1 net@2 b gnd gnd NMOS L=0.4U W=4U
+Mpmos@0 vdd a net@4 vdd PMOS L=0.4U W=2U
+Mpmos@1 vdd b net@4 vdd PMOS L=0.4U W=2U
+Xnot@1 net@4 out Multiplier__not
+.ENDS Multiplier__and
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: ha{sch}
+XXOR@0 a b s Multiplier__XOR
+Xand@0 a b c Multiplier__and
+
+* Spice Code nodes in cell cell 'ha{sch}'
+vdd vdd 0 DC 5V
+v0 a 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 20ns)
+v1 b 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 40ns)
+cload0 c 0 20fF
+cload1 s 0 20fF
+.tran 200ns
+.include C:\Users\user\Downloads\C5_models.txt"
+.END

@@ -1,0 +1,123 @@
+*** SPICE deck for cell MULL{sch} from library Multiplier
+*** Created on Sat Sep 02, 2023 10:27:39
+*** Last revised on Fri Sep 08, 2023 17:33:47
+*** Written on Fri Sep 08, 2023 17:35:32 by Electric VLSI Design System, version 9.07
+*** Layout tech: mocmos, foundry MOSIS
+*** UC SPICE *** , MIN_RESIST 4.0, MIN_CAPAC 0.1FF
+
+*** SUBCIRCUIT Multiplier__not FROM CELL not{sch}
+.SUBCKT Multiplier__not in out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 out in gnd gnd NMOS L=0.4U W=2U
+Mpmos@0 vdd in out vdd PMOS L=0.4U W=2U
+.ENDS Multiplier__not
+
+*** SUBCIRCUIT Multiplier__and FROM CELL and{sch}
+.SUBCKT Multiplier__and a b out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 net@4 a net@2 gnd NMOS L=0.4U W=4U
+Mnmos@1 net@2 b gnd gnd NMOS L=0.4U W=4U
+Mpmos@0 vdd a net@4 vdd PMOS L=0.4U W=2U
+Mpmos@1 vdd b net@4 vdd PMOS L=0.4U W=2U
+Xnot@1 net@4 out Multiplier__not
+.ENDS Multiplier__and
+
+*** SUBCIRCUIT Multiplier__XOR FROM CELL XOR{sch}
+.SUBCKT Multiplier__XOR a b out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 out a net@6 gnd NMOS L=0.4U W=4U
+Mnmos@1 net@6 b gnd gnd NMOS L=0.4U W=4U
+Mnmos@2 gnd net@25 net@7 gnd NMOS L=0.4U W=4U
+Mnmos@3 net@7 net@37 out gnd NMOS L=0.4U W=4U
+Mpmos@0 vdd a net@2 vdd PMOS L=0.4U W=4U
+Mpmos@1 net@2 net@25 out vdd PMOS L=0.4U W=4U
+Mpmos@2 net@3 net@37 vdd vdd PMOS L=0.4U W=4U
+Mpmos@3 out b net@3 vdd PMOS L=0.4U W=4U
+Xnot@0 a net@37 Multiplier__not
+Xnot@1 b net@25 Multiplier__not
+.ENDS Multiplier__XOR
+
+*** SUBCIRCUIT Multiplier__ha FROM CELL ha{sch}
+.SUBCKT Multiplier__ha a b c s
+** GLOBAL gnd
+** GLOBAL vdd
+XXOR@0 a b s Multiplier__XOR
+Xand@0 a b c Multiplier__and
+.ENDS Multiplier__ha
+
+*** SUBCIRCUIT Multiplier__or FROM CELL or{sch}
+.SUBCKT Multiplier__or a b out
+** GLOBAL gnd
+** GLOBAL vdd
+Mnmos@0 net@4 a gnd gnd NMOS L=0.4U W=2U
+Mnmos@1 net@4 b gnd gnd NMOS L=0.4U W=2U
+Mpmos@0 vdd a net@1 vdd PMOS L=0.4U W=4U
+Mpmos@1 net@1 b net@4 vdd PMOS L=0.4U W=4U
+Xnot@0 net@4 out Multiplier__not
+.ENDS Multiplier__or
+
+*** SUBCIRCUIT Multiplier__fa FROM CELL fa{sch}
+.SUBCKT Multiplier__fa a b cin cout s
+** GLOBAL gnd
+** GLOBAL vdd
+Xha@2 a b net@33 net@26 Multiplier__ha
+Xha@3 net@26 cin net@31 s Multiplier__ha
+Xor@0 net@31 net@33 cout Multiplier__or
+.ENDS Multiplier__fa
+
+.global gnd vdd
+
+*** TOP LEVEL CELL: MULL{sch}
+Xand@0 A0 B0 P0 Multiplier__and
+Xand@1 A1 B0 net@64 Multiplier__and
+Xand@2 A2 B0 net@73 Multiplier__and
+Xand@3 A3 B0 net@80 Multiplier__and
+Xand@4 A0 B1 net@66 Multiplier__and
+Xand@5 A1 B1 net@70 Multiplier__and
+Xand@6 A2 B1 net@77 Multiplier__and
+Xand@7 A3 B1 net@87 Multiplier__and
+Xand@8 A0 B2 net@125 Multiplier__and
+Xand@9 A1 B2 net@130 Multiplier__and
+Xand@10 A2 B2 net@137 Multiplier__and
+Xand@11 A3 B2 net@144 Multiplier__and
+Xand@12 A0 B3 net@178 Multiplier__and
+Xand@13 A1 B3 net@184 Multiplier__and
+Xand@14 A2 B3 net@190 Multiplier__and
+Xand@15 A3 B3 net@196 Multiplier__and
+Xfa@0 net@70 net@73 net@69 net@119 net@76 Multiplier__fa
+Xfa@1 net@77 net@80 net@76 net@133 net@83 Multiplier__fa
+Xfa@2 net@130 net@133 net@129 net@179 net@136 Multiplier__fa
+Xfa@3 net@137 net@140 net@136 net@185 net@143 Multiplier__fa
+Xfa@4 net@144 net@147 net@143 net@191 net@197 Multiplier__fa
+Xfa@5 net@184 net@185 net@183 P4 net@189 Multiplier__fa
+Xfa@6 net@190 net@191 net@189 P5 net@195 Multiplier__fa
+Xfa@7 net@196 net@197 net@195 P6 P7 Multiplier__fa
+Xha@0 net@66 net@64 net@69 P1 Multiplier__ha
+Xha@1 net@83 net@87 net@147 net@140 Multiplier__ha
+Xha@3 net@125 net@119 net@129 P2 Multiplier__ha
+Xha@4 net@178 net@179 net@183 P3 Multiplier__ha
+
+* Spice Code nodes in cell cell 'MULL{sch}'
+vdd vdd 0 DC 5V
+v0 A0 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 20ns)
+v1 A1 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 40ns)
+v2 A2 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 80ns)
+v3 A3 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 160ns)
+v8 B0 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 20ns)
+v9 B1 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 40ns)
+v10 B2 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 80ns)
+v11 B3 0 DC 5V pulse(0V 5V 0 0.1ns 0.1ns 10ns 160ns)
+cload0 P0 0 20fF
+cload1 P1 0 20fF
+cload2 P2 0 20fF
+cload3 P3 0 20fF
+cload4 P4 0 20fF
+cload5 P5 0 20fF
+cload6 P6 0 20fF
+cload7 P7 0 20fF
+.tran 1000ns
+.include C:\Users\user\Downloads\C5_models.txt"
+.END

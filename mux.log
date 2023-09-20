@@ -1,0 +1,29 @@
+Circuit: *** SPICE deck for cell mux{sch} from library Multiplier
+
+Ignoring BSIM parameter XL
+Ignoring BSIM parameter XW
+Ignoring BSIM parameter XL
+Ignoring BSIM parameter XW
+Warning: Pd = 0 is less than W.
+Warning: Ps = 0 is less than W.
+Warning: Pd = 0 is less than W.
+Warning: Ps = 0 is less than W.
+Direct Newton iteration for .op point succeeded.
+
+Date: Wed Sep 06 19:03:13 2023
+Total elapsed time: 0.140 seconds.
+
+tnom = 27
+temp = 27
+method = modified trap
+totiter = 3450
+traniter = 3443
+tranpoints = 1543
+accept = 1422
+rejected = 121
+matrix size = 10
+fillins = 0
+solver = Normal
+Matrix Compiler1: 508 bytes object code size  0.3/0.3/[0.1]
+Matrix Compiler2: 914 bytes object code size  0.2/0.4/[0.1]
+
